@@ -12,7 +12,8 @@ import FormImagePicker from "../components/forms/FormImagePicker"
 
 const validationSchema = Yup.object().shape({
   title: Yup.string().required('ป้อนชื่อสินค้าก่อน').min(1).label("Title"),
-  price: Yup.number().required('ป้อนราคาก่อน').min(1, 'ราคาต้องมากกว่า 0').max(10000).label("Price"),
+  price: Yup.number().required('ป้อนราคาก่อน').min(1, 'ราคาต้องมากกว่า 0').max(1000000).label("Price"),
+  location: Yup.string().required('ป้อนสถานที่ก่อน').min(1).label("Location"),
   description: Yup.string().required('ป้อนราคาก่อน').min(1).label("Description"),
   images: Yup.array().min(1, "เลือกรูปสินค้าอย่างน้อย 1 รูปก่อน"),
 })
@@ -23,14 +24,17 @@ const PostingScreen = () => {
       <ScrollView>
         <Form
           initialValues={{
+            id: Math.floor(100000 + Math.random() * 900000),
             title: "",
             price: "",
+            location: "",
             description: "",
             category: null,
             images: [],
           }}
-          onSubmit={(values) => console.log(values)}
+          onSubmit={(values) => console.log(JSON.stringify(values,null,2))} 
           validationSchema={validationSchema}
+          // onSubmit={(values) => console.log(JSON.stringify(values, null, 2))}
         >
           <FormImagePicker name="images" />
           <FormField maxLength={255} name="title" placeholder="ชื่อสินค้า"/>
@@ -39,6 +43,12 @@ const PostingScreen = () => {
             maxLength={8}
             name="price"
             placeholder="ราคา"
+          />
+          <FormField
+            keyboardType="Text"
+            maxLength={128}
+            name="location"
+            placeholder="สถานที่"
           />
           <FormField
             maxLength={255}
